@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -116,7 +115,7 @@ fun DisplayScrollItem(item: ScrollItem) {
         shape = RoundedCornerShape(8.dp)
         ) {
         Text(
-            text = item.name,
+            text = item.label,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
             modifier = Modifier.padding(3.dp)
