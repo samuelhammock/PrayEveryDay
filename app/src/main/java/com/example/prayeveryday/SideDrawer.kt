@@ -1,27 +1,21 @@
 package com.example.prayeveryday
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 
 @Composable
-fun SideDrawer(drawerState: DrawerState) {
+fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues) {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
+
+                // have to figure out how to get DisplayScrollItems (or content for given page) to be here
+
+                /*
                 Column(modifier = Modifier.fillMaxHeight()
                     .width(50.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()
@@ -29,6 +23,8 @@ fun SideDrawer(drawerState: DrawerState) {
                         .background(MaterialTheme.colorScheme.secondary) ){
                     }
                 }
+
+                 */
             }
         }
     ) {}

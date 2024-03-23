@@ -18,7 +18,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
@@ -97,11 +96,12 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun SetMainScreen() {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = { DisplayTopBar(scrollBehavior, "Today's Prayer Requests") },
-            content = { padding -> DisplayScrollContent(innerPadding = padding) },
+            topBar = { DisplayTopBar(scrollBehavior, "Today's Prayer Requests", drawerState) },
+            content = { padding ->  SideDrawer(drawerState, padding) },
             bottomBar = { DisplayNavBar() }
         )
     }

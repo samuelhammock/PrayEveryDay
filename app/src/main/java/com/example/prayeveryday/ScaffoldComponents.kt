@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.MailOutline
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -81,10 +82,9 @@ fun DisplayNavBar() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, drawerState: DrawerState) {
     val scope = rememberCoroutineScope()
-    SideDrawer(drawerState = drawerState)
+
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
