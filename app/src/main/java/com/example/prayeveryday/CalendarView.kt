@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -57,55 +55,55 @@ class CalendarActivity : ComponentActivity() {
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = { DisplayTopBar(scrollBehavior, "Calendar", drawerState)},
-            content = { padding -> DisplayCalendarContent(innerPadding = padding)},
+            content = { padding -> SideDrawer(drawerState, padding, Page.CALENDAR)},
             bottomBar = { DisplayNavBar() }
             )
     }
+}
 
-    @Composable
-    fun DisplayCalendarContent(innerPadding: PaddingValues) {
-        val currentMonth = remember { YearMonth.now() }
-        val startMonth = remember { currentMonth.minusMonths(100) } // Adjust as needed
-        val endMonth = remember { currentMonth.plusMonths(100) } // Adjust as needed
-        val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } // Available from the library
+@Composable
+fun DisplayCalendarContent(innerPadding: PaddingValues) {
+    val currentMonth = remember { YearMonth.now() }
+    val startMonth = remember { currentMonth.minusMonths(100) } // Adjust as needed
+    val endMonth = remember { currentMonth.plusMonths(100) } // Adjust as needed
+    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } // Available from the library
 
-        val state = rememberCalendarState(
-            startMonth = startMonth,
-            endMonth = endMonth,
-            firstVisibleMonth = currentMonth,
-            firstDayOfWeek = firstDayOfWeek
+    val state = rememberCalendarState(
+        startMonth = startMonth,
+        endMonth = endMonth,
+        firstVisibleMonth = currentMonth,
+        firstDayOfWeek = firstDayOfWeek
+    )
+
+    Column(modifier = Modifier.padding(innerPadding)) {
+        Text(text = (DateFormat.format("MMMM", Date()) as String),
+            fontWeight = FontWeight.Bold,
+            fontSize = 24.sp,
+            modifier = Modifier.padding(5.dp))
+        HorizontalCalendar(  // https://github.com/kizitonwose/Calendar/tree/main?tab=readme-ov-filew
+            modifier = Modifier.border(Dp.Hairline, MaterialTheme.colorScheme.tertiary),
+            state = state,
+            dayContent = { Day(it) }
         )
-
-        Column(modifier = Modifier.padding(innerPadding)) {
-            Text(text = (DateFormat.format("MMMM", Date()) as String),
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                modifier = Modifier.padding(5.dp))
-            HorizontalCalendar(  // https://github.com/kizitonwose/Calendar/tree/main?tab=readme-ov-filew
-                modifier = Modifier.border(Dp.Hairline, MaterialTheme.colorScheme.tertiary),
-                state = state,
-                dayContent = { Day(it) }
-            )
-            LazyColumn(modifier = Modifier.fillMaxWidth()
-                .padding(2.dp)) {
-                items(scrollItems) { item ->
-                    DisplayScrollItem(item = item)
-                }
+        LazyColumn(modifier = Modifier.fillMaxWidth()
+            .padding(2.dp)) {
+            items(scrollItems) { item ->
+                DisplayScrollItem(item = item)
             }
         }
     }
+}
 
-    @Composable
-    fun Day(day: CalendarDay) {
-        Box(
-            modifier = Modifier
-                .border(Dp.Hairline, MaterialTheme.colorScheme.tertiary)
-                .aspectRatio(1f), // This is important for square sizing!
-            contentAlignment = Alignment.TopEnd
-        ) {
-            Text(text = day.date.dayOfMonth.toString(),
-                fontSize = 12.sp,
-                modifier = Modifier.padding(2.dp))
-        }
+@Composable
+fun Day(day: CalendarDay) {
+    Box(
+        modifier = Modifier
+            .border(Dp.Hairline, MaterialTheme.colorScheme.tertiary)
+            .aspectRatio(1f), // This is important for square sizing!
+        contentAlignment = Alignment.TopEnd
+    ) {
+        Text(text = day.date.dayOfMonth.toString(),
+            fontSize = 12.sp,
+            modifier = Modifier.padding(2.dp))
     }
 }

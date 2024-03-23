@@ -6,8 +6,12 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.runtime.Composable
 
+enum class Page {
+    TODAY, CALENDAR, NEW, NOTIFICATIONS
+}
+
 @Composable
-fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues) {
+fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page) {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -24,6 +28,13 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues) {
                  */
             }
         },
-        content = {  DisplayScrollContent(innerPadding = innerPadding) }
+        content = {
+            when(page) {
+                Page.TODAY -> DisplayScrollContent(innerPadding = innerPadding)
+                Page.CALENDAR -> DisplayCalendarContent(innerPadding = innerPadding)
+                Page.NEW -> DisplayNewPrayerRequestContent(innerPadding = innerPadding)
+                Page.NOTIFICATIONS -> TODO()
+            }
+        }
     )
 }

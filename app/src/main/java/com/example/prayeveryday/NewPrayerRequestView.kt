@@ -72,113 +72,114 @@ class NewPrayerRequestActivity : ComponentActivity() {
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = { DisplayTopBar(scrollBehavior, "Create a New Prayer Request", drawerState) },
-            content = { padding -> DisplayNewPrayerRequestContent(innerPadding = padding) },
+            content = { padding -> SideDrawer(drawerState, padding, Page.NEW) },
             bottomBar = { DisplayNavBar() }
         )
     }
-
-    @Composable
-    fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues) {
-        var requestLabel by remember { mutableStateOf("Label") }
-        var requestSummary by remember { mutableStateOf("Summary") }
-        var requestDetails by remember { mutableStateOf("Details") }
-        var requestDate by remember { mutableStateOf("mm/dd/yyyy") }
-        val scrollState = rememberScrollState()
-        var menuExpanded by remember { mutableStateOf(false) }
-        var menuTextFieldSize by remember { mutableStateOf(Size.Zero)}
-        val menuOptions = listOf("Do Not Repeat", "Repeat Daily", "Repeat Weekly", "Repeat Monthly","Repeat Yearly")
-        var menuSelectedText by remember { mutableStateOf("Do Not Repeat") }
-        val icon = if (menuExpanded)
-            Icons.Filled.KeyboardArrowUp
-        else
-            Icons.Filled.KeyboardArrowDown
+}
 
 
-        Column(modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxWidth()
-            .verticalScroll(scrollState)) {
-            TextField(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp),
-                value = requestLabel,
-                onValueChange = { requestLabel = it },
-                label = { Text("Label") }
-            )
+@Composable
+fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues) {
+    var requestLabel by remember { mutableStateOf("Label") }
+    var requestSummary by remember { mutableStateOf("Summary") }
+    var requestDetails by remember { mutableStateOf("Details") }
+    var requestDate by remember { mutableStateOf("mm/dd/yyyy") }
+    val scrollState = rememberScrollState()
+    var menuExpanded by remember { mutableStateOf(false) }
+    var menuTextFieldSize by remember { mutableStateOf(Size.Zero)}
+    val menuOptions = listOf("Do Not Repeat", "Repeat Daily", "Repeat Weekly", "Repeat Monthly","Repeat Yearly")
+    var menuSelectedText by remember { mutableStateOf("Do Not Repeat") }
+    val icon = if (menuExpanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
 
-            Card(shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(1.dp)) {
-                Row(modifier = Modifier.padding(start = 7.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
 
-                    Column( modifier = Modifier.padding(5.dp)) {
-                        TextField(modifier = Modifier.size(115.dp, 50.dp),
-                            value = requestDate,
-                            shape = RoundedCornerShape(8.dp),
-                            label = { Text("Date to pray") },
-                            onValueChange = { requestDate = it })
+    Column(modifier = Modifier
+        .padding(innerPadding)
+        .fillMaxWidth()
+        .verticalScroll(scrollState)) {
+        TextField(
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            value = requestLabel,
+            onValueChange = { requestLabel = it },
+            label = { Text("Label") }
+        )
+
+        Card(shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(1.dp)) {
+            Row(modifier = Modifier.padding(start = 7.dp),
+                horizontalArrangement = Arrangement.SpaceBetween) {
+
+                Column( modifier = Modifier.padding(5.dp)) {
+                    TextField(modifier = Modifier.size(115.dp, 50.dp),
+                        value = requestDate,
+                        shape = RoundedCornerShape(8.dp),
+                        label = { Text("Date to pray") },
+                        onValueChange = { requestDate = it })
+                }
+                OutlinedTextField(
+                    value = menuSelectedText,
+                    onValueChange = { menuSelectedText = it },
+                    modifier = Modifier.padding(5.dp)
+                        .onGloballyPositioned { coordinates ->
+                            // This value is used to assign to
+                            // the DropDown the same width
+                            menuTextFieldSize = coordinates.size.toSize()
+                        },
+                    trailingIcon = {
+                        Icon(icon,"contentDescription",
+                            Modifier.clickable { menuExpanded = !menuExpanded })
                     }
-                    OutlinedTextField(
-                        value = menuSelectedText,
-                        onValueChange = { menuSelectedText = it },
-                        modifier = Modifier.padding(5.dp)
-                            .onGloballyPositioned { coordinates ->
-                                // This value is used to assign to
-                                // the DropDown the same width
-                                menuTextFieldSize = coordinates.size.toSize()
-                            },
-                        trailingIcon = {
-                            Icon(icon,"contentDescription",
-                                Modifier.clickable { menuExpanded = !menuExpanded })
-                        }
-                    )
-                    DropdownMenu(
-                        expanded = menuExpanded,
-                        onDismissRequest = { menuExpanded = false },
-                        modifier = Modifier
-                            .width(with(LocalDensity.current){menuTextFieldSize.width.toDp()})
-                    ) {
-                        menuOptions.forEach { label ->
-                            DropdownMenuItem(text = { Text(text = label) },
-                                onClick = {
+                )
+                DropdownMenu(
+                    expanded = menuExpanded,
+                    onDismissRequest = { menuExpanded = false },
+                    modifier = Modifier
+                        .width(with(LocalDensity.current){menuTextFieldSize.width.toDp()})
+                ) {
+                    menuOptions.forEach { label ->
+                        DropdownMenuItem(text = { Text(text = label) },
+                            onClick = {
                                 menuSelectedText = label
                                 menuExpanded = false })
-                        }
                     }
                 }
             }
-            TextField(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .fillMaxWidth()
-                    .height(80.dp),
-                shape = RoundedCornerShape(8.dp),
-                value = requestSummary,
-                onValueChange = { requestSummary = it },
-                label = { Text("Summary") }
-            )
-            TextField(
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .fillMaxWidth()
-                        .height(300.dp),
-                shape = RoundedCornerShape(8.dp),
-                value = requestDetails,
-                onValueChange = { requestDetails = it },
-                label = { Text("Details") },
-                singleLine = false
-            )
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End) {
+        }
+        TextField(
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth()
+                .height(80.dp),
+            shape = RoundedCornerShape(8.dp),
+            value = requestSummary,
+            onValueChange = { requestSummary = it },
+            label = { Text("Summary") }
+        )
+        TextField(
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth()
+                .height(300.dp),
+            shape = RoundedCornerShape(8.dp),
+            value = requestDetails,
+            onValueChange = { requestDetails = it },
+            label = { Text("Details") },
+            singleLine = false
+        )
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End) {
 
-                Button(content = { Text(text = "Save") },
-                    onClick = { /* TODO */ },
-                    shape = RoundedCornerShape(8.dp))
-            }
+            Button(content = { Text(text = "Save") },
+                onClick = { /* TODO */ },
+                shape = RoundedCornerShape(8.dp))
         }
     }
 }
