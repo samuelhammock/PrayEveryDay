@@ -1,5 +1,6 @@
 package com.example.prayeveryday
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -11,6 +12,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -32,6 +35,10 @@ data class BottomNavItem( // class for bottom nav bar items
     val route: String,
     val icon: ImageVector
 )
+
+enum class Page {
+    TODAY, CALENDAR, NEW, NOTIFICATIONS
+}
 
 val bottomNavItems = listOf( // list of bottom nav bar items
     BottomNavItem(
@@ -113,5 +120,34 @@ fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, draw
             }
         },
         scrollBehavior = scrollBehavior
+    )
+}
+
+@Composable
+fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page) {
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                /*
+                Column(modifier = Modifier.fillMaxHeight()
+                    .width(50.dp)) {
+                    Row(modifier = Modifier.fillMaxWidth()
+                        .height(50.dp)
+                        .background(MaterialTheme.colorScheme.secondary) ){
+                    }
+                }
+
+                 */
+            }
+        },
+        content = {
+            when(page) {
+                Page.TODAY -> DisplayScrollContent(innerPadding = innerPadding)
+                Page.CALENDAR -> DisplayCalendarContent(innerPadding = innerPadding)
+                Page.NEW -> DisplayNewPrayerRequestContent(innerPadding = innerPadding)
+                Page.NOTIFICATIONS -> TODO()
+            }
+        }
     )
 }
