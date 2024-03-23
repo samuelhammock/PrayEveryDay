@@ -1,5 +1,6 @@
 package com.example.prayeveryday
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -152,7 +153,6 @@ fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues) {
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerView() {
@@ -180,6 +180,7 @@ fun DatePickerView() {
     }
 }
 
+@SuppressLint("SimpleDateFormat")
 private fun convertMillisToDate(millis: Long): String {
     val formatter = SimpleDateFormat("dd/MM/yyyy")
     return formatter.format(Date(millis))

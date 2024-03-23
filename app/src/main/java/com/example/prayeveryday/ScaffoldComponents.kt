@@ -1,7 +1,14 @@
 package com.example.prayeveryday
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Add
@@ -28,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 
 data class BottomNavItem( // class for bottom nav bar items
@@ -43,30 +51,30 @@ enum class Page {
 val bottomNavItems = listOf( // list of bottom nav bar items
     BottomNavItem(
         name = "New",
-        route = "create",
+        route = NewPrayerRequest.route,
         icon = Icons.Rounded.Add
     ),
     BottomNavItem(
         name = "Today",
-        route = "today",
+        route = Today.route,
         icon = Icons.Rounded.MailOutline
     ),
     BottomNavItem(
         name = "Calendar",
-        route = "Calendar",
+        route = Calendar.route,
         icon = Icons.Rounded.DateRange
     ),
 )
 
 @Composable
-fun DisplayNavBar() {
+fun DisplayNavBar(navController: NavHostController) {
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer
     ) {
         bottomNavItems.forEach { item ->
             NavigationBarItem(
                 selected = false,
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate(item.route) },
                 label = {
                     Text(
                         text = item.name,
@@ -129,7 +137,7 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                /*
+
                 Column(modifier = Modifier.fillMaxHeight()
                     .width(50.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()
@@ -138,7 +146,7 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page
                     }
                 }
 
-                 */
+
             }
         },
         content = {
