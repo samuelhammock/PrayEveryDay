@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,9 +67,11 @@ class NewPrayerRequestActivity : ComponentActivity() {
     @Composable
     fun SetNewPrayerRequestScreen() {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = { DisplayTopBar(scrollBehavior = scrollBehavior, header = "Create a New Prayer Request") },
+            topBar = { DisplayTopBar(scrollBehavior, "Create a New Prayer Request", drawerState) },
             content = { padding -> DisplayNewPrayerRequestContent(innerPadding = padding) },
             bottomBar = { DisplayNavBar() }
         )

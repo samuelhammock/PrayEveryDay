@@ -105,40 +105,5 @@ class MainActivity : ComponentActivity() {
             bottomBar = { DisplayNavBar() }
         )
     }
-
-    @Composable
-    fun DisplayScrollContent(innerPadding: PaddingValues) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding)
-        ) {
-            items(scrollItems) { item ->
-                DisplayScrollItem(item = item)
-            }
-        }
-    }
-
-    @Composable
-    fun DisplayScrollItem(item: ScrollItem) {
-        Card(
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(1.dp)
-        ) {
-            Text(
-                text = item.label,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(3.dp)
-            )
-            Text(
-                text = item.summary,
-                fontWeight = FontWeight.Normal,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 10.dp, top = 3.dp, bottom = 5.dp)
-            )
-        }
-    }
 }
+

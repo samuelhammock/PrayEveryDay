@@ -12,9 +12,6 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues) {
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-
-                // have to figure out how to get DisplayScrollItems (or content for given page) to be here
-
                 /*
                 Column(modifier = Modifier.fillMaxHeight()
                     .width(50.dp)) {
@@ -26,6 +23,7 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues) {
 
                  */
             }
-        }
-    ) {}
+        },
+        content = {  DisplayScrollContent(innerPadding = innerPadding) }
+    )
 }
