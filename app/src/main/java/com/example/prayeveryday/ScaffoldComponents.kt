@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.MailOutline
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,63 +25,60 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
-
-data class BottomNavItem( // class for bottom nav bar items
-    val name: String,
-    val route: String,
-    val icon: ImageVector
-)
 
 enum class Page {
     TODAY, CALENDAR, NEW, NOTIFICATIONS
 }
 
-val bottomNavItems = listOf( // list of bottom nav bar items
-    BottomNavItem(
-        name = "New",
-        route = NewPrayerRequest.route,
-        icon = Icons.Rounded.Add
-    ),
-    BottomNavItem(
-        name = "Today",
-        route = Today.route,
-        icon = Icons.Rounded.MailOutline
-    ),
-    BottomNavItem(
-        name = "Calendar",
-        route = Calendar.route,
-        icon = Icons.Rounded.DateRange
-    ),
-)
-
 @Composable
 fun DisplayNavBar(navController: NavHostController) {
+    val navList = listOf<Destinations>(
+        NewPrayerRequest,
+        Today,
+        Calendar
+    )
+    val selectedIndex = rememberSaveable {
+        mutableIntStateOf(1)
+    }
+    // This article's writing may be useless but the code is good https://medium.com/geekculture/bottom-navigation-in-jetpack-compose-android-9cd232a8b16
+    // helped me figure out how to highlight the selected item on the nav bar
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer
     ) {
-        bottomNavItems.forEach { item ->
+        navList.forEach {  destination ->
             NavigationBarItem(
-                selected = false,
-                onClick = { navController.navigate(item.route) },
+                selected = currentRoute == destination.route,
+                onClick = {
+                    navController.navigate(destination.route){
+                        popUpTo(Today.route)
+                        launchSingleTop = true
+                    }
+                },
                 label = {
                     Text(
-                        text = item.name,
+                        text = destination.name,
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
                 icon = {
                     Icon(
-                        imageVector = item.icon,
-                        contentDescription = "${item.name} Icon",
+                        imageVector = destination.icon,
+                        contentDescription = "${destination.name} Icon",
                     )
                 }
             )
@@ -137,7 +131,6 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-
                 Column(modifier = Modifier.fillMaxHeight()
                     .width(50.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()
