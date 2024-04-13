@@ -49,9 +49,6 @@ fun DisplayNavBar(navController: NavHostController) {
         Today,
         Calendar
     )
-    val selectedIndex = rememberSaveable {
-        mutableIntStateOf(1)
-    }
     // This article's writing may be useless but the code is good https://medium.com/geekculture/bottom-navigation-in-jetpack-compose-android-9cd232a8b16
     // helped me figure out how to highlight the selected item on the nav bar
     val navBackStackEntry by navController.currentBackStackEntryAsState()

@@ -1,6 +1,7 @@
 package com.example.prayeveryday
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,15 +50,17 @@ import java.util.Date
 
 @Composable
 fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues) {
-    var requestLabel by remember { mutableStateOf("Label") }
-    var requestSummary by remember { mutableStateOf("Summary") }
-    var requestDetails by remember { mutableStateOf("Details") }
-    var requestDate by remember { mutableStateOf("mm/dd/yyyy") }
+    var requestLabel by remember { mutableStateOf("") }
+    var requestSummary by remember { mutableStateOf("") }
+    var requestDetails by remember { mutableStateOf("") }
+    var requestDate by remember { mutableStateOf("") }
+    var repeatEndDate by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
     var menuExpanded by remember { mutableStateOf(false) }
     var menuTextFieldSize by remember { mutableStateOf(Size.Zero) }
     val menuOptions = listOf("Do Not Repeat", "Repeat Daily", "Repeat Weekly", "Repeat Monthly","Repeat Yearly")
     var menuSelectedText by remember { mutableStateOf("Do Not Repeat") }
+    var visible by remember { mutableStateOf(false) }
     val icon = if (menuExpanded)
         Icons.Filled.KeyboardArrowUp
     else
@@ -84,40 +87,55 @@ fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues) {
                 .padding(1.dp)) {
             Row(modifier = Modifier.padding(start = 7.dp),
                 horizontalArrangement = Arrangement.SpaceBetween) {
-
-                Column( modifier = Modifier.padding(5.dp)) {
-                    TextField(modifier = Modifier.size(115.dp, 50.dp),
+                Column(modifier =  Modifier.padding(5.dp)) {
+                    Text(text = "Prayer Request Date",
+                        modifier = Modifier.padding(bottom = 5.dp))
+                    TextField(modifier = Modifier.size(150.dp, 50.dp),
                         value = requestDate,
                         shape = RoundedCornerShape(8.dp),
-                        label = { Text("Date to pray") },
+                        label = { Text("mm/dd/yyyy") },
                         onValueChange = { requestDate = it })
                 }
-                OutlinedTextField(
-                    value = menuSelectedText,
-                    onValueChange = { menuSelectedText = it },
-                    modifier = Modifier.padding(5.dp)
-                        .onGloballyPositioned { coordinates ->
-                            // This value is used to assign to
-                            // the DropDown the same width
-                            menuTextFieldSize = coordinates.size.toSize()
-                        },
-                    trailingIcon = {
-                        Icon(icon,"contentDescription",
-                            Modifier.clickable { menuExpanded = !menuExpanded })
+                AnimatedVisibility(visible = visible) {
+                    Column(modifier = Modifier.padding(5.dp)) {
+                        Text(text = "Repeat Until",
+                            modifier = Modifier.padding(bottom = 5.dp))
+                        TextField(modifier = Modifier.size(150.dp, 50.dp),
+                            value = repeatEndDate,
+                            shape = RoundedCornerShape(8.dp),
+                            label = { Text("mm/dd/yy") },
+                            onValueChange = { repeatEndDate = it })
                     }
-                )
-                DropdownMenu(
-                    expanded = menuExpanded,
-                    onDismissRequest = { menuExpanded = false },
-                    modifier = Modifier
-                        .width(with(LocalDensity.current){menuTextFieldSize.width.toDp()})
-                ) {
-                    menuOptions.forEach { label ->
-                        DropdownMenuItem(text = { Text(text = label) },
-                            onClick = {
-                                menuSelectedText = label
-                                menuExpanded = false })
-                    }
+                }
+            }
+            OutlinedTextField(
+                value = menuSelectedText,
+                onValueChange = { menuSelectedText = it},
+                readOnly = true,
+                modifier = Modifier
+                    .padding(5.dp)
+                    .onGloballyPositioned { coordinates ->
+                        // This value is used to assign to
+                        // the DropDown the same width
+                        menuTextFieldSize = coordinates.size.toSize()
+                    },
+                trailingIcon = {
+                    Icon(icon,"contentDescription",
+                        Modifier.clickable { menuExpanded = !menuExpanded })
+                }
+            )
+            DropdownMenu(
+                expanded = menuExpanded,
+                onDismissRequest = { menuExpanded = false },
+                modifier = Modifier
+                    .width(with(LocalDensity.current){menuTextFieldSize.width.toDp()})
+            ) {
+                menuOptions.forEach { label ->
+                    DropdownMenuItem(text = { Text(text = label) },
+                        onClick = {
+                            menuSelectedText = label
+                            menuExpanded = false
+                            visible = (menuSelectedText != "Do Not Repeat")})
                 }
             }
         }
