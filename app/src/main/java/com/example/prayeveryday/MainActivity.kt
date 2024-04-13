@@ -1,3 +1,8 @@
+/*
+This file is the starting point of the app.  It determines what happens when the app is opened.
+Currently it just sets up the NavController and sets the view to the main screen.
+ */
+
 package com.example.prayeveryday
 
 import android.os.Bundle
@@ -11,16 +16,16 @@ import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState) // starting point of app
         setContent {
-            Navigator()
+            Navigator() // begin at main screen
         }
     }
 }
 
 @Preview
 @Composable
-fun Navigator() {
+fun Navigator() { // controls navigation throughout app
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Today.route) {
         composable(Today.route) {

@@ -1,3 +1,8 @@
+/*
+This file holds all of the components that make up the calendar view.
+CalendarView.kt calls and assembles these components along with the app scaffold.
+ */
+
 package com.example.prayeveryday
 
 import android.text.format.DateFormat
@@ -13,7 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -29,11 +34,11 @@ import java.util.Date
 
 
 @Composable
-fun DisplayCalendarContent(innerPadding: PaddingValues) {
-    val currentMonth = remember { YearMonth.now() }
-    val startMonth = remember { currentMonth.minusMonths(100) } // Adjust as needed
-    val endMonth = remember { currentMonth.plusMonths(100) } // Adjust as needed
-    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } // Available from the library
+fun DisplayCalendarContent(innerPadding: PaddingValues) { // displays calendar view within scaffold, with list of requests below
+    val currentMonth = rememberSaveable { YearMonth.now() } // stores the month displayed at top of calendar
+    val startMonth = rememberSaveable { currentMonth.minusMonths(100) } // maximum number of months before current month
+    val endMonth = rememberSaveable { currentMonth.plusMonths(100) } // maximum number of months after current month
+    val firstDayOfWeek = rememberSaveable { firstDayOfWeekFromLocale() }
 
     val state = rememberCalendarState(
         startMonth = startMonth,
@@ -43,16 +48,17 @@ fun DisplayCalendarContent(innerPadding: PaddingValues) {
     )
 
     Column(modifier = Modifier.padding(innerPadding)) {
-        Text(text = (DateFormat.format("MMMM", Date()) as String),
+        Text(text = (DateFormat.format("MMMM", Date()) as String), // displays name of current month
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
             modifier = Modifier.padding(5.dp))
         HorizontalCalendar(  // https://github.com/kizitonwose/Calendar/tree/main?tab=readme-ov-filew
             modifier = Modifier.border(Dp.Hairline, MaterialTheme.colorScheme.tertiary),
             state = state,
-            dayContent = { Day(it) }
+            dayContent = { Day(it) }  // determines appearance of each calendar block
         )
-        LazyColumn(modifier = Modifier.fillMaxWidth()
+        LazyColumn(modifier = Modifier // displays selected day's prayer requests below calendar
+            .fillMaxWidth()
             .padding(2.dp)) {
             items(scrollItems) { item ->
                 DisplayScrollItem(item = item)
@@ -62,8 +68,8 @@ fun DisplayCalendarContent(innerPadding: PaddingValues) {
 }
 
 @Composable
-fun Day(day: CalendarDay) {
-    Box(
+fun Day(day: CalendarDay) { // https://github.com/kizitonwose/Calendar/tree/main?tab=readme-ov-filew
+    Box( // each box is a day on the calendar
         modifier = Modifier
             .border(Dp.Hairline, MaterialTheme.colorScheme.tertiary)
             .aspectRatio(1f), // This is important for square sizing!

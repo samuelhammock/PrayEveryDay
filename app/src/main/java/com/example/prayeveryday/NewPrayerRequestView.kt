@@ -1,3 +1,8 @@
+/*
+This file creates the new prayer request view using the components defined in NewPrayerRequestComponents.kt.
+It assembles the view using those components and the app scaffold.
+ */
+
 package com.example.prayeveryday
 
 import androidx.compose.material3.DrawerValue
@@ -12,7 +17,7 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewPrayerRequestScreen(navController: NavHostController) {
+fun NewPrayerRequestScreen(navController: NavHostController) { // initializes new prayer request view
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 

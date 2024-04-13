@@ -1,3 +1,9 @@
+/*
+This file defines all of the components of the app scaffold.  The scaffold is used in every
+page in the app.
+These components are called as needed from each view to fill the scaffold.
+ */
+
 package com.example.prayeveryday
 
 import androidx.compose.foundation.background
@@ -26,9 +32,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,13 +42,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
 
-enum class Page {
+enum class Page { // enum to store what page the app is currently displaying
     TODAY, CALENDAR, NEW, NOTIFICATIONS
 }
 
 @Composable
-fun DisplayNavBar(navController: NavHostController) {
-    val navList = listOf<Destinations>(
+fun DisplayNavBar(navController: NavHostController) { // The bottom nav bar that allows navigaton between pages
+    val navList = listOf<Destinations>(  // the destinations from Destinations.kt
         NewPrayerRequest,
         Today,
         Calendar
@@ -52,27 +56,27 @@ fun DisplayNavBar(navController: NavHostController) {
     // This article's writing may be useless but the code is good https://medium.com/geekculture/bottom-navigation-in-jetpack-compose-android-9cd232a8b16
     // helped me figure out how to highlight the selected item on the nav bar
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.route // stores the current page
 
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer
     ) {
-        navList.forEach {  destination ->
+        navList.forEach {  destination -> // displays each option in nav bar
             NavigationBarItem(
                 selected = currentRoute == destination.route,
-                onClick = {
+                onClick = { // navigates to selected page and resets backstack
                     navController.navigate(destination.route){
                         popUpTo(Today.route)
                         launchSingleTop = true
                     }
                 },
-                label = {
+                label = { // label for each nav option
                     Text(
                         text = destination.name,
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
-                icon = {
+                icon = { // icon for each nav option
                     Icon(
                         imageVector = destination.icon,
                         contentDescription = "${destination.name} Icon",
@@ -86,8 +90,9 @@ fun DisplayNavBar(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+// the top bar with name of current page and button to open side drawer
 fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, drawerState: DrawerState) {
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope() // coroutine scope needed for concurrent animation of drawer opening
 
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -95,7 +100,7 @@ fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, draw
             titleContentColor = MaterialTheme.colorScheme.primary
         ),
         title = {
-            Text(
+            Text( // displays name of current page
                 text = header,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -104,9 +109,9 @@ fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, draw
             )
         },
         navigationIcon = {
-            IconButton(onClick =
+            IconButton(onClick = // button to open side drawer
             {
-                scope.launch {
+                scope.launch { // launches coroutine so drawer animation can be completed concurrently
                     drawerState.apply {
                         if (isClosed) open() else close()
                     }
@@ -123,10 +128,10 @@ fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, draw
 }
 
 @Composable
-fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page) {
+fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page) { // side drawer containing buttons
     ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
+        drawerState = drawerState, // stores whether drawer is open or closed
+        drawerContent = { // specifies what is displayed in drawer
             ModalDrawerSheet {
                 Column(modifier = Modifier.fillMaxHeight()
                     .width(50.dp)) {
@@ -139,7 +144,8 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page
 
             }
         },
-        content = {
+        content = { // defines what is behind drawer, which is the main content of each page
+            // seems like a weird place to put it structurally but I don't make the rules
             when(page) {
                 Page.TODAY -> DisplayScrollContent(innerPadding = innerPadding)
                 Page.CALENDAR -> DisplayCalendarContent(innerPadding = innerPadding)

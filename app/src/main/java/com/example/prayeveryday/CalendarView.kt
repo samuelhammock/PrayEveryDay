@@ -1,3 +1,8 @@
+/*
+This file creates the calendar view using the components defined in CalendarComponents.kt.
+It assembles the view using those components and the app scaffold.
+ */
+
 package com.example.prayeveryday
 
 import androidx.compose.material3.DrawerValue
@@ -12,7 +17,7 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalendarScreen(navController: NavHostController) {
+fun CalendarScreen(navController: NavHostController) { // initializes calendar screen
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 

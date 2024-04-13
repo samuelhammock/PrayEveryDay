@@ -1,3 +1,8 @@
+/*
+This file holds all of the components that make up the today view.
+TodayView.kt calls and assembles these components along with the app scaffold.
+ */
+
 package com.example.prayeveryday
 
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,7 +21,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun DisplayScrollContent(innerPadding: PaddingValues) {
+fun DisplayScrollContent(innerPadding: PaddingValues) { // displays a list of the prayer requests for today
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -29,7 +34,7 @@ fun DisplayScrollContent(innerPadding: PaddingValues) {
 }
 
 @Composable
-fun DisplayScrollItem(item: ScrollItem) {
+fun DisplayScrollItem(item: ScrollItem) { // displays a single prayer request in the list
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier

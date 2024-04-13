@@ -1,3 +1,8 @@
+/*
+This file creates the today view using the components defined in TodayComponents.kt.
+It assembles the view using those components and the app scaffold.
+ */
+
 package com.example.prayeveryday
 
 import androidx.compose.material3.DrawerValue
@@ -17,7 +22,7 @@ data class ScrollItem( // class for scrollable items on home screen
     val details: String
 )
 
-val scrollItems = listOf( // list of scroll items for testing
+val scrollItems = listOf( // list of dummy scroll items used for testing
     ScrollItem(
         label = "Test item 1",
         summary = "jfirst item to be tested",
@@ -71,7 +76,7 @@ val scrollItems = listOf( // list of scroll items for testing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodayScreen(navController: NavHostController) {
+fun TodayScreen(navController: NavHostController) { // initializes today screen
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
