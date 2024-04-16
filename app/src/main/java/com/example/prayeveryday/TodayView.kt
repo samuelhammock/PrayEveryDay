@@ -76,7 +76,7 @@ val scrollItems = listOf( // list of dummy scroll items used for testing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodayScreen(navController: NavHostController) { // initializes today screen
+fun TodayScreen(navController: NavHostController, dao: PrayerRequestDao) { // initializes today screen
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 

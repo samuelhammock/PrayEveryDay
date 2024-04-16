@@ -17,7 +17,7 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewPrayerRequestScreen(navController: NavHostController) { // initializes new prayer request view
+fun NewPrayerRequestScreen(navController: NavHostController, dao: PrayerRequestDao) { // initializes new prayer request view
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
