@@ -17,14 +17,14 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalendarScreen(navController: NavHostController, dao: PrayerRequestDao) { // initializes calendar screen
+fun CalendarScreen(navController: NavHostController, viewModel: PrayerRequestViewModel) { // initializes calendar screen
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { DisplayTopBar(scrollBehavior, "Calendar", drawerState)},
-        content = { padding -> SideDrawer(drawerState, padding, Page.CALENDAR)},
+        content = { padding -> SideDrawer(drawerState, padding, Page.CALENDAR, viewModel)},
         bottomBar = { DisplayNavBar(navController) }
     )
 }

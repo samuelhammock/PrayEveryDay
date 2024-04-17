@@ -5,6 +5,7 @@ and the interface used to access the database
 
 package com.example.prayeveryday
 
+import android.content.Context
 import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
@@ -13,19 +14,42 @@ import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import androidx.room.Room
 import androidx.room.RoomDatabase
-import java.util.Date
 
 @Database(entities = [PrayerRequest::class], version = 1)
-abstract class AppDatabase : RoomDatabase() { // defines the database
+abstract class PrayerRequestDatabase : RoomDatabase() { // defines the database
     abstract fun PrayerRequestDao() : PrayerRequestDao
+
+    companion object {
+
+        private var INSTANCE: PrayerRequestDatabase? = null
+
+        fun getInstance(context: Context): PrayerRequestDatabase {
+            synchronized(this) {
+                var instance = INSTANCE
+
+                if (instance == null) {
+                    instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        PrayerRequestDatabase::class.java,
+                        "customer_database"
+                    ).fallbackToDestructiveMigration()
+                        .build()
+
+                    INSTANCE = instance
+                }
+                return instance
+            }
+        }
+    }
 }
 
 @Entity(tableName = "prayerRequests")
 data class PrayerRequest( // defines the data class the database stores
     @PrimaryKey(autoGenerate = true) val uid: Int,
     @ColumnInfo(name = "Label") val label: String,
-    @ColumnInfo(name = "Date") val date: Date,
+    @ColumnInfo(name = "Date") val date: String,
     @ColumnInfo(name = "Summary") val summary: String,
     @ColumnInfo(name = "Details") val details: String,
     @ColumnInfo(name = "Repeating") val repeating: Boolean
@@ -43,5 +67,5 @@ interface PrayerRequestDao { // defines methods that can be used to interact wit
     fun getAll(): List<PrayerRequest>
 
     @Query("SELECT * FROM prayerRequests WHERE date = :date")
-    fun getRequestsFromDate(date: Date): PrayerRequest
+    fun getRequestsFromDate(date: String): List<PrayerRequest>
 }

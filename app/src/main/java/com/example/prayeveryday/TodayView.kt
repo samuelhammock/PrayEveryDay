@@ -76,14 +76,14 @@ val scrollItems = listOf( // list of dummy scroll items used for testing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodayScreen(navController: NavHostController, dao: PrayerRequestDao) { // initializes today screen
+fun TodayScreen(navController: NavHostController, viewModel: PrayerRequestViewModel) { // initializes today screen
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { DisplayTopBar(scrollBehavior, "Today's Prayer Requests", drawerState) },
-        content = { padding ->  SideDrawer(drawerState, padding, Page.TODAY)},
+        content = { padding ->  SideDrawer(drawerState, padding, Page.TODAY, viewModel)},
         bottomBar = { DisplayNavBar(navController) }
     )
 }

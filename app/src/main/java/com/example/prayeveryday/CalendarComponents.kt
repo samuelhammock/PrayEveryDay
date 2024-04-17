@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +38,7 @@ import java.util.Locale
 
 
 @Composable
-fun DisplayCalendarContent(innerPadding: PaddingValues) { // displays calendar view within scaffold, with list of requests below
+fun DisplayCalendarContent(innerPadding: PaddingValues, viewModel: PrayerRequestViewModel) { // displays calendar view within scaffold, with list of requests below
     val currentMonth = rememberSaveable { YearMonth.now() } // stores the month displayed at top of calendar
     val startMonth = rememberSaveable { currentMonth.minusMonths(100) } // maximum number of months before current month
     val endMonth = rememberSaveable { currentMonth.plusMonths(100) } // maximum number of months after current month
@@ -68,6 +66,7 @@ fun DisplayCalendarContent(innerPadding: PaddingValues) { // displays calendar v
                 DaysOfWeekTitle(daysOfWeek = daysOfWeek) // shows days of week above calendar
             }
         )
+        /*
         LazyColumn(modifier = Modifier // displays selected day's prayer requests below calendar
             .fillMaxWidth()
             .padding(2.dp)) {
@@ -75,6 +74,8 @@ fun DisplayCalendarContent(innerPadding: PaddingValues) { // displays calendar v
                 DisplayScrollItem(item = item)
             }
         }
+
+         */
     }
 }
 

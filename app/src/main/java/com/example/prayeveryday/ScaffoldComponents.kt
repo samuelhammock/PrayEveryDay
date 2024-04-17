@@ -47,7 +47,7 @@ enum class Page { // enum to store what page the app is currently displaying
 }
 
 @Composable
-fun DisplayNavBar(navController: NavHostController) { // The bottom nav bar that allows navigaton between pages
+fun DisplayNavBar(navController: NavHostController) { // The bottom nav bar that allows navigation between pages
     val navList = listOf<Destinations>(  // the destinations from Destinations.kt
         NewPrayerRequest,
         Today,
@@ -128,7 +128,7 @@ fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, draw
 }
 
 @Composable
-fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page) { // side drawer containing buttons
+fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page, viewModel: PrayerRequestViewModel) { // side drawer containing buttons
     ModalNavigationDrawer(
         drawerState = drawerState, // stores whether drawer is open or closed
         drawerContent = { // specifies what is displayed in drawer
@@ -147,9 +147,9 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page
         content = { // defines what is behind drawer, which is the main content of each page
             // seems like a weird place to put it structurally but I don't make the rules
             when(page) {
-                Page.TODAY -> DisplayScrollContent(innerPadding = innerPadding)
-                Page.CALENDAR -> DisplayCalendarContent(innerPadding = innerPadding)
-                Page.NEW -> DisplayNewPrayerRequestContent(innerPadding = innerPadding)
+                Page.TODAY -> DisplayScrollContent(innerPadding = innerPadding, viewModel = viewModel)
+                Page.CALENDAR -> DisplayCalendarContent(innerPadding = innerPadding, viewModel = viewModel)
+                Page.NEW -> DisplayNewPrayerRequestContent(innerPadding = innerPadding, viewModel = viewModel)
                 Page.NOTIFICATIONS -> TODO()
             }
         }

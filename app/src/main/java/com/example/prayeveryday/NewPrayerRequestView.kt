@@ -17,14 +17,14 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewPrayerRequestScreen(navController: NavHostController, dao: PrayerRequestDao) { // initializes new prayer request view
+fun NewPrayerRequestScreen(navController: NavHostController, viewModel: PrayerRequestViewModel) { // initializes new prayer request view
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { DisplayTopBar(scrollBehavior, "Create a New Prayer Request", drawerState) },
-        content = { padding -> SideDrawer(drawerState, padding, Page.NEW) },
+        content = { padding -> SideDrawer(drawerState, padding, Page.NEW, viewModel) },
         bottomBar = { DisplayNavBar(navController) }
     )
 }
