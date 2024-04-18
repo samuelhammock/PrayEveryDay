@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 enum class Page { // enum to store what page the app is currently displaying
     TODAY, CALENDAR, NEW, NOTIFICATIONS
@@ -147,7 +148,7 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page
         content = { // defines what is behind drawer, which is the main content of each page
             // seems like a weird place to put it structurally but I don't make the rules
             when(page) {
-                Page.TODAY -> DisplayScrollContent(innerPadding = innerPadding, viewModel = viewModel)
+                Page.TODAY -> DisplayScrollContent(innerPadding = innerPadding, viewModel = viewModel, LocalDate.now())
                 Page.CALENDAR -> DisplayCalendarContent(innerPadding = innerPadding, viewModel = viewModel)
                 Page.NEW -> DisplayNewPrayerRequestContent(innerPadding = innerPadding, viewModel = viewModel)
                 Page.NOTIFICATIONS -> TODO()

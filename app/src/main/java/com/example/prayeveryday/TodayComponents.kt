@@ -25,8 +25,8 @@ import java.time.LocalDate
 
 
 @Composable
-fun DisplayScrollContent(innerPadding: PaddingValues, viewModel: PrayerRequestViewModel) { // displays a list of the prayer requests for today
-    viewModel.getAllFromDate(LocalDate.now())
+fun DisplayScrollContent(innerPadding: PaddingValues, viewModel: PrayerRequestViewModel, date: LocalDate) { // displays a list of the prayer requests for a given day, also used for the calendar screen
+    viewModel.getAllFromDate(date)
     val requests by viewModel.requests.observeAsState(listOf())
 
     LazyColumn(

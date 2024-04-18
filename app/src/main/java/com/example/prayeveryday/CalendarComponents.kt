@@ -7,6 +7,7 @@ package com.example.prayeveryday
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,7 +18,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +37,7 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
@@ -43,6 +49,7 @@ fun DisplayCalendarContent(innerPadding: PaddingValues, viewModel: PrayerRequest
     val startMonth = rememberSaveable { currentMonth.minusMonths(100) } // maximum number of months before current month
     val endMonth = rememberSaveable { currentMonth.plusMonths(100) } // maximum number of months after current month
     val daysOfWeek = rememberSaveable { daysOfWeek() }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
     val state = rememberCalendarState(
         startMonth = startMonth,
@@ -55,7 +62,11 @@ fun DisplayCalendarContent(innerPadding: PaddingValues, viewModel: PrayerRequest
         HorizontalCalendar(  // https://github.com/kizitonwose/Calendar/tree/main?tab=readme-ov-filew
             modifier = Modifier.border(Dp.Hairline, MaterialTheme.colorScheme.tertiary),
             state = state,
-            dayContent = { Day(it) },  // determines appearance of each calendar block
+            dayContent = { day ->
+                Day(day, isSelected = selectedDate == day.date) { day ->
+                    selectedDate = if (selectedDate == day.date) null else day.date
+                }
+            },  // determines appearance of each calendar block
             monthHeader = {
                 Text( text = state.lastVisibleMonth.yearMonth.month.toString() // DO NOT TOUCH: Idk how this gets the month but it does.
                     .lowercase()
@@ -66,32 +77,23 @@ fun DisplayCalendarContent(innerPadding: PaddingValues, viewModel: PrayerRequest
                 DaysOfWeekTitle(daysOfWeek = daysOfWeek) // shows days of week above calendar
             }
         )
-        /*
-        LazyColumn(modifier = Modifier // displays selected day's prayer requests below calendar
-            .fillMaxWidth()
-            .padding(2.dp)) {
-            items(scrollItems) { item ->
-                DisplayScrollItem(item = item)
-            }
-        }
-
-         */
+        DisplayScrollContent(innerPadding = PaddingValues(0.dp), viewModel = viewModel, date = LocalDate.now())
     }
 }
 
 @Composable
-fun Day(day: CalendarDay) { // https://github.com/kizitonwose/Calendar/tree/main?tab=readme-ov-filew
+fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) { // https://github.com/kizitonwose/Calendar/tree/main?tab=readme-ov-filew
     Box( // each box is a day on the calendar
-        modifier = if (day.position == DayPosition.MonthDate) // displays different color for day boxes outside current month
-            Modifier
-                .border(Dp.Hairline, MaterialTheme.colorScheme.tertiary)
-                .aspectRatio(1f) // This is important for square sizing!
-                .background(Color.White)
-            else Modifier
+        modifier = Modifier
             .border(Dp.Hairline, MaterialTheme.colorScheme.tertiary)
             .aspectRatio(1f) // This is important for square sizing!
-            .background(Color.LightGray),
-
+            .background(color = if (isSelected) Color.Cyan
+                else if (day.position == DayPosition.MonthDate) Color.White
+                else Color.LightGray)
+            .clickable(
+                enabled = day.position == DayPosition.MonthDate,
+                onClick = { onClick(day) }
+            ),
         contentAlignment = Alignment.TopEnd
     ) {
         Text(text = day.date.dayOfMonth.toString(),
