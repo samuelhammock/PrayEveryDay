@@ -18,7 +18,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,9 +42,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigator(viewModel: PrayerRequestViewModel) { // controls navigation throughout app
     val navController = rememberNavController()
-    val context = LocalContext.current
-    val db = Room.databaseBuilder(context, PrayerRequestDatabase::class.java, "requestDatabase").build() // initialize database
-    val dao = db.PrayerRequestDao()
 
     NavHost(navController = navController, startDestination = Today.route) {
         composable(Today.route) {
@@ -60,7 +56,7 @@ fun Navigator(viewModel: PrayerRequestViewModel) { // controls navigation throug
     }
 }
 
-class PrayerRequestViewModelFactory(val application: Application) :
+class PrayerRequestViewModelFactory(private val application: Application) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return PrayerRequestViewModel(application) as T

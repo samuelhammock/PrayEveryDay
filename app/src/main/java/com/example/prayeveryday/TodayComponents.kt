@@ -6,6 +6,7 @@ TodayView.kt calls and assembles these components along with the app scaffold.
 package com.example.prayeveryday
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,15 +21,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.LocalDate
 
 
 @Composable
 fun DisplayScrollContent(innerPadding: PaddingValues, viewModel: PrayerRequestViewModel) { // displays a list of the prayer requests for today
+    viewModel.getAllFromDate(LocalDate.now())
     val requests by viewModel.requests.observeAsState(listOf())
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(innerPadding)
     ) {
         items(requests) { item ->

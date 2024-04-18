@@ -68,6 +68,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("com.google.devtools.ksp:symbol-processing-api:1.9.0-1.0.13")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.5")
+    implementation("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 

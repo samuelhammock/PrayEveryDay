@@ -22,7 +22,6 @@ abstract class PrayerRequestDatabase : RoomDatabase() { // defines the database
     abstract fun PrayerRequestDao() : PrayerRequestDao
 
     companion object {
-
         private var INSTANCE: PrayerRequestDatabase? = null
 
         fun getInstance(context: Context): PrayerRequestDatabase {
@@ -33,7 +32,7 @@ abstract class PrayerRequestDatabase : RoomDatabase() { // defines the database
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         PrayerRequestDatabase::class.java,
-                        "customer_database"
+                        "prayerRequestDatabase"
                     ).fallbackToDestructiveMigration()
                         .build()
 
@@ -47,12 +46,23 @@ abstract class PrayerRequestDatabase : RoomDatabase() { // defines the database
 
 @Entity(tableName = "prayerRequests")
 data class PrayerRequest( // defines the data class the database stores
-    @PrimaryKey(autoGenerate = true) val uid: Int,
-    @ColumnInfo(name = "Label") val label: String,
-    @ColumnInfo(name = "Date") val date: String,
-    @ColumnInfo(name = "Summary") val summary: String,
-    @ColumnInfo(name = "Details") val details: String,
-    @ColumnInfo(name = "Repeating") val repeating: Boolean
+    @PrimaryKey(autoGenerate = true)
+    var uid: Int,
+
+    @ColumnInfo(name = "Label")
+    var label: String,
+
+    @ColumnInfo(name = "Date")
+    var date: String,
+
+    @ColumnInfo(name = "Summary")
+    var summary: String,
+
+    @ColumnInfo(name = "Details")
+    var details: String,
+
+    @ColumnInfo(name = "Repeating")
+    var repeating: Boolean
     )
 
 @Dao

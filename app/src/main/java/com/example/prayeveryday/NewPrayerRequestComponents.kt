@@ -46,6 +46,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 
 @Composable
@@ -168,21 +171,28 @@ fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues, viewModel: Praye
             Button(content = { Text(text = "Save") }, // button to save request data
                 onClick = {
                     if((requestLabel == "") || (requestDate == "")) {
-                        Toast.makeText(context, "Please enter a date and summary", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Please enter a date and summary", Toast.LENGTH_SHORT).show()
                     } else if((menuSelectedText != "Do Not Repeat") && (repeatEndDate == "")) {
-                        Toast.makeText(context, "Please enter an end date", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Please enter an end date", Toast.LENGTH_SHORT).show()
                     } else {
                         scope.launch {
-                            viewModel.insertPrayerRequest(
-                                PrayerRequest(
+                            try {
+                                val dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                                val date = LocalDate.parse(requestDate, dateFormatter) //need date to be in LocalDate format before converting to String
+                                val request = PrayerRequest(
                                     uid = 0, // 0 tells database to auto-generate uid
                                     label = requestLabel,
-                                    date = requestDate,
+                                    date = date.toString(),
                                     summary = requestSummary,
                                     details = requestDetails,
                                     repeating = false
                                 )
-                            )
+                                viewModel.insertPrayerRequest(request)
+                                Toast.makeText(context, "Prayer Request Saved", Toast.LENGTH_SHORT).show()
+                            } catch(_: DateTimeParseException) {
+                                Toast.makeText(context, "Please enter a date in mm/dd/yyyy format", Toast.LENGTH_SHORT).show()
+                            }
+
                         }
                     }
                 },

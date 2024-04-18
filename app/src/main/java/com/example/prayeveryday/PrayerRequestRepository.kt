@@ -2,8 +2,11 @@ package com.example.prayeveryday
 
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class PrayerRequestRepository(private val prayerRequestDao: PrayerRequestDao) {
     val requests = MutableLiveData<List<PrayerRequest>>()
@@ -23,13 +26,23 @@ class PrayerRequestRepository(private val prayerRequestDao: PrayerRequestDao) {
 
     fun getAll() {
         scope.launch(Dispatchers.IO) {
-            requests.value = prayerRequestDao.getAll()
+            requests.postValue(asyncGetAll().await())
         }
     }
 
-    fun getRequestsFromDate(date: String) {
+    private fun asyncGetAll(): Deferred<List<PrayerRequest>?> =
+        scope.async(Dispatchers.IO) {
+            return@async prayerRequestDao.getAll()
+        }
+
+    fun getRequestsFromDate(date: LocalDate) {
         scope.launch(Dispatchers.IO) {
-            requests.value = prayerRequestDao.getRequestsFromDate(date)
+            requests.postValue(asyncGetRequestsFromDate(date).await())
         }
     }
+
+    private fun asyncGetRequestsFromDate(date: LocalDate): Deferred<List<PrayerRequest>?> =
+        scope.async(Dispatchers.IO) {
+            return@async prayerRequestDao.getRequestsFromDate(date.toString())
+        }
 }

@@ -3,10 +3,11 @@ package com.example.prayeveryday
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import java.time.LocalDate
 
 class PrayerRequestViewModel(application: Application) : ViewModel() {
     val requests: LiveData<List<PrayerRequest>>
-    val repository: PrayerRequestRepository
+    private val repository: PrayerRequestRepository
 
     init {
         val prayerRequestDatabase = PrayerRequestDatabase.getInstance(application)
@@ -28,7 +29,7 @@ class PrayerRequestViewModel(application: Application) : ViewModel() {
         repository.getAll()
     }
 
-    fun getAllFromDate(date: String) {
+    fun getAllFromDate(date: LocalDate) {
         repository.getRequestsFromDate(date)
     }
 }
