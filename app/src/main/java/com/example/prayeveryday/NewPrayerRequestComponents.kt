@@ -169,6 +169,7 @@ fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues, viewModel: Praye
             horizontalArrangement = Arrangement.End) {
 
             Button(content = { Text(text = "Save") }, // button to save request data
+                shape = RoundedCornerShape(8.dp),
                 onClick = {
                     if((requestLabel == "") || (requestDate == "")) {
                         Toast.makeText(context, "Please enter a date and summary", Toast.LENGTH_SHORT).show()
@@ -200,8 +201,7 @@ fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues, viewModel: Praye
 
                         }
                     }
-                },
-                shape = RoundedCornerShape(8.dp)
+                }
             )
         }
     }
