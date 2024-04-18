@@ -49,7 +49,7 @@ fun DisplayCalendarContent(innerPadding: PaddingValues, viewModel: PrayerRequest
     val startMonth = rememberSaveable { currentMonth.minusMonths(100) } // maximum number of months before current month
     val endMonth = rememberSaveable { currentMonth.plusMonths(100) } // maximum number of months after current month
     val daysOfWeek = rememberSaveable { daysOfWeek() }
-    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+    var selectedDate by remember { mutableStateOf<LocalDate>(LocalDate.now()) }
 
     val state = rememberCalendarState(
         startMonth = startMonth,
@@ -63,8 +63,8 @@ fun DisplayCalendarContent(innerPadding: PaddingValues, viewModel: PrayerRequest
             modifier = Modifier.border(Dp.Hairline, MaterialTheme.colorScheme.tertiary),
             state = state,
             dayContent = { day ->
-                Day(day, isSelected = selectedDate == day.date) { day ->
-                    selectedDate = if (selectedDate == day.date) null else day.date
+                Day(day, isSelected = selectedDate == day.date) { calendarDay ->
+                    selectedDate = calendarDay.date
                 }
             },  // determines appearance of each calendar block
             monthHeader = {
@@ -77,7 +77,7 @@ fun DisplayCalendarContent(innerPadding: PaddingValues, viewModel: PrayerRequest
                 DaysOfWeekTitle(daysOfWeek = daysOfWeek) // shows days of week above calendar
             }
         )
-        DisplayScrollContent(innerPadding = PaddingValues(0.dp), viewModel = viewModel, date = LocalDate.now())
+        DisplayScrollContent(innerPadding = PaddingValues(0.dp), viewModel = viewModel, date = selectedDate)
     }
 }
 

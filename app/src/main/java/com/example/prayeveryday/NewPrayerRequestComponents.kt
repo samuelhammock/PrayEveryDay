@@ -188,6 +188,11 @@ fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues, viewModel: Praye
                                     repeating = false
                                 )
                                 viewModel.insertPrayerRequest(request)
+                                requestLabel = ""
+                                requestDate = ""
+                                requestSummary = ""
+                                repeatEndDate = ""
+                                requestDetails = ""
                                 Toast.makeText(context, "Prayer Request Saved", Toast.LENGTH_SHORT).show()
                             } catch(_: DateTimeParseException) {
                                 Toast.makeText(context, "Please enter a date in mm/dd/yyyy format", Toast.LENGTH_SHORT).show()
