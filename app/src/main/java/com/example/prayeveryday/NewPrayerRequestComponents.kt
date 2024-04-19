@@ -5,6 +5,7 @@ NewPrayerRequestView.kt calls and assembles these components along with the app 
 
 package com.example.prayeveryday
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -180,6 +181,10 @@ fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues, viewModel: Praye
                             try {
                                 val dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
                                 val date = LocalDate.parse(requestDate, dateFormatter) //need date to be in LocalDate format before converting to String
+                                var endDate = ""
+                                if(menuSelectedText != "Do Not Repeat") {
+                                    endDate = LocalDate.parse(repeatEndDate, dateFormatter).toString()
+                                }
                                 val request = PrayerRequest(
                                     uid = 0, // 0 tells database to auto-generate uid
                                     label = requestLabel,
@@ -188,20 +193,80 @@ fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues, viewModel: Praye
                                     details = requestDetails,
                                     repeating = false
                                 )
-                                viewModel.insertPrayerRequest(request)
+                                addPrayerRequest(request, menuSelectedText, endDate, viewModel)
                                 requestLabel = ""
                                 requestDate = ""
                                 requestSummary = ""
                                 repeatEndDate = ""
                                 requestDetails = ""
+                                menuSelectedText = "Do Not Repeat"
                                 Toast.makeText(context, "Prayer Request Saved", Toast.LENGTH_SHORT).show()
                             } catch(_: DateTimeParseException) {
-                                Toast.makeText(context, "Please enter a date in mm/dd/yyyy format", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Please enter dates in mm/dd/yyyy format", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                 }
             )
+        }
+    }
+}
+
+fun addPrayerRequest(request: PrayerRequest, repeat: String, endDate: String, viewModel: PrayerRequestViewModel) {
+    val dateFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd")
+    val requests = ArrayList<PrayerRequest>()
+
+    when(repeat){
+        "Do Not Repeat" -> {
+            viewModel.insertPrayerRequest(request)
+        }
+        "Repeat Daily" -> {
+            request.repeating = true
+            val end = LocalDate.parse(endDate, dateFormatter)
+            var current = LocalDate.parse(request.date, dateFormatter)
+            while(current <= end) {
+                requests.add(request.copy())
+                current = current.plusDays(1)
+                request.date = current.toString()
+                Log.d("Test", "current: $current end: $end")
+            }
+            viewModel.insertPrayerRequests(requests)
+        }
+        "Repeat Weekly" -> {
+            request.repeating = true
+            val end = LocalDate.parse(endDate, dateFormatter)
+            var current = LocalDate.parse(request.date, dateFormatter)
+            while(current <= end) {
+                requests.add(request.copy())
+                current = current.plusDays(7)
+                request.date = current.toString()
+                Log.d("Test", "current: $current end: $end")
+            }
+            viewModel.insertPrayerRequests(requests)
+        }
+        "Repeat Monthly" -> {
+            request.repeating = true
+            val end = LocalDate.parse(endDate, dateFormatter)
+            var current = LocalDate.parse(request.date, dateFormatter)
+            while(current <= end) {
+                requests.add(request.copy())
+                current = current.plusMonths(1)
+                request.date = current.toString()
+                Log.d("Test", "current: $current end: $end")
+            }
+            viewModel.insertPrayerRequests(requests)
+        }
+        "Repeat Yearly" -> {
+            request.repeating = true
+            val end = LocalDate.parse(endDate, dateFormatter)
+            var current = LocalDate.parse(request.date, dateFormatter)
+            while(current <= end) {
+                requests.add(request.copy())
+                current = current.plusYears(1)
+                request.date = current.toString()
+                Log.d("Test", "current: $current end: $end")
+            }
+            viewModel.insertPrayerRequests(requests)
         }
     }
 }

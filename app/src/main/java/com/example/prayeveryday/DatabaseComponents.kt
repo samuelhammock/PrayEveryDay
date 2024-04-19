@@ -70,6 +70,9 @@ interface PrayerRequestDao { // defines methods that can be used to interact wit
     @Insert
     fun insert(prayerRequest: PrayerRequest)
 
+    @Insert
+    fun insertAll(prayerRequests: List<PrayerRequest>)
+
     @Delete
     fun delete(prayerRequest: PrayerRequest)
 

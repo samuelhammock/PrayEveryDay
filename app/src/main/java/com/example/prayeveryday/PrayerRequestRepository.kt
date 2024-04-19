@@ -18,6 +18,12 @@ class PrayerRequestRepository(private val prayerRequestDao: PrayerRequestDao) {
         }
     }
 
+    fun insertPrayerRequests(requests: List<PrayerRequest>) {
+        scope.launch(Dispatchers.IO) {
+            prayerRequestDao.insertAll(requests)
+        }
+    }
+
     fun deletePrayerRequest(request: PrayerRequest) {
         scope.launch(Dispatchers.IO) {
             prayerRequestDao.delete(request)

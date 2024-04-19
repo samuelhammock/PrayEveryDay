@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 enum class Page { // enum to store what page the app is currently displaying behind sideDrawer
@@ -128,7 +126,7 @@ fun DisplayNavBar(navController: NavHostController) { // The bottom nav bar that
 @Composable
 // the top bar with name of current page and button to open side drawer
 fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, drawerState: DrawerState) {
-    val scope = rememberCoroutineScope() // coroutine scope needed for concurrent animation of drawer opening
+    //val scope = rememberCoroutineScope() // coroutine scope needed for concurrent animation of drawer opening
 
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -144,6 +142,7 @@ fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, draw
                 modifier = Modifier.padding(start = 5.dp)
             )
         },
+        /*
         navigationIcon = {
             IconButton(onClick = // button to open side drawer
             {
@@ -159,6 +158,8 @@ fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, draw
                 )
             }
         },
+
+         */
         scrollBehavior = scrollBehavior
     )
 }

@@ -21,6 +21,10 @@ class PrayerRequestViewModel(application: Application) : ViewModel() {
         repository.insertPrayerRequest(request)
     }
 
+    fun insertPrayerRequests(requests: List<PrayerRequest>) {
+        repository.insertPrayerRequests(requests)
+    }
+
     fun deletePrayerRequest(request: PrayerRequest) {
         repository.deletePrayerRequest(request)
     }
