@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
     implementation("androidx.compose.material3:material3-adaptive:1.0.0-alpha06")
     implementation("com.kizitonwose.calendar:compose:2.5.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.31.1-alpha")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("com.google.devtools.ksp:symbol-processing-api:1.9.0-1.0.13")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.5")

@@ -24,7 +24,7 @@ fun NewPrayerRequestScreen(navController: NavHostController, viewModel: PrayerRe
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { DisplayTopBar(scrollBehavior, "Create a New Prayer Request", drawerState) },
-        content = { padding -> SideDrawer(drawerState, padding, Page.NEW, viewModel) },
+        content = { padding -> SideDrawer(drawerState, padding, Page.NEW, viewModel, navController) },
         bottomBar = { DisplayNavBar(navController) }
     )
 }

@@ -25,7 +25,7 @@ fun TodayScreen(navController: NavHostController, viewModel: PrayerRequestViewMo
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { DisplayTopBar(scrollBehavior, "Today's Prayer Requests", drawerState) },
-        content = { padding ->  SideDrawer(drawerState, padding, Page.TODAY, viewModel)},
+        content = { padding ->  SideDrawer(drawerState, padding, Page.TODAY, viewModel, navController)},
         bottomBar = { DisplayNavBar(navController) }
     )
 }

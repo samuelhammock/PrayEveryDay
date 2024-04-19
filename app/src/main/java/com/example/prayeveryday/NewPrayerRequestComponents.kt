@@ -198,7 +198,6 @@ fun DisplayNewPrayerRequestContent(innerPadding: PaddingValues, viewModel: Praye
                             } catch(_: DateTimeParseException) {
                                 Toast.makeText(context, "Please enter a date in mm/dd/yyyy format", Toast.LENGTH_SHORT).show()
                             }
-
                         }
                     }
                 }

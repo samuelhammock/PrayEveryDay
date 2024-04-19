@@ -24,7 +24,7 @@ fun CalendarScreen(navController: NavHostController, viewModel: PrayerRequestVie
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { DisplayTopBar(scrollBehavior, "Calendar", drawerState)},
-        content = { padding -> SideDrawer(drawerState, padding, Page.CALENDAR, viewModel)},
+        content = { padding -> SideDrawer(drawerState, padding, Page.CALENDAR, viewModel, navController)},
         bottomBar = { DisplayNavBar(navController) }
     )
 }

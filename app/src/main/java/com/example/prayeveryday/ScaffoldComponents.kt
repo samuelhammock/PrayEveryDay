@@ -7,6 +7,8 @@ These components are called as needed from each view to fill the scaffold.
 package com.example.prayeveryday
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,7 +18,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,7 +37,9 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -43,8 +49,37 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-enum class Page { // enum to store what page the app is currently displaying
-    TODAY, CALENDAR, NEW, NOTIFICATIONS
+enum class Page { // enum to store what page the app is currently displaying behind sideDrawer
+    TODAY, CALENDAR, NEW
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DisplayBackTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, navController: NavHostController) {
+    TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.primary
+        ),
+        title = {
+            Text( // displays name of current page
+                text = header,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(start = 5.dp)
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) { // go back?
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Return Button"
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior
+    )
 }
 
 @Composable
@@ -129,16 +164,24 @@ fun DisplayTopBar(scrollBehavior: TopAppBarScrollBehavior?, header: String, draw
 }
 
 @Composable
-fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page, viewModel: PrayerRequestViewModel) { // side drawer containing buttons
+fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page, viewModel: PrayerRequestViewModel, navController: NavHostController) { // side drawer containing buttons
     ModalNavigationDrawer(
         drawerState = drawerState, // stores whether drawer is open or closed
         drawerContent = { // specifies what is displayed in drawer
             ModalDrawerSheet {
                 Column(modifier = Modifier.fillMaxHeight()
-                    .width(50.dp)) {
-                    Row(modifier = Modifier.fillMaxWidth()
-                        .height(50.dp)
-                        .background(MaterialTheme.colorScheme.secondary) ){
+                    .width(250.dp)
+                    .padding(innerPadding)) {
+                    Row(verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.fillMaxWidth()
+                        .height(60.dp)
+                        .background(Color.LightGray)
+                        .clickable { navController.navigate("Notifications") }){
+                        Icon(Icons.Rounded.Notifications, "Notification Icon", Modifier.padding(start = 15.dp, end = 15.dp))
+                        Text(fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            text = "Notifications")
                     }
                 }
 
@@ -151,7 +194,6 @@ fun SideDrawer(drawerState: DrawerState, innerPadding: PaddingValues, page: Page
                 Page.TODAY -> DisplayScrollContent(innerPadding = innerPadding, viewModel = viewModel, LocalDate.now())
                 Page.CALENDAR -> DisplayCalendarContent(innerPadding = innerPadding, viewModel = viewModel)
                 Page.NEW -> DisplayNewPrayerRequestContent(innerPadding = innerPadding, viewModel = viewModel)
-                Page.NOTIFICATIONS -> TODO()
             }
         }
     )

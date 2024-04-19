@@ -53,6 +53,9 @@ fun Navigator(viewModel: PrayerRequestViewModel) { // controls navigation throug
         composable(NewPrayerRequest.route) {
             NewPrayerRequestScreen(navController, viewModel)
         }
+        composable("Notifications") {
+            NotificationsScreen(navController)
+        }
     }
 }
 

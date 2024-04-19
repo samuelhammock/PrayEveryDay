@@ -5,6 +5,7 @@ TodayView.kt calls and assembles these components along with the app scaffold.
 
 package com.example.prayeveryday
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,17 +50,17 @@ fun DisplayScrollContent(innerPadding: PaddingValues, viewModel: PrayerRequestVi
             .padding(innerPadding)
     ) {
         items(requests) { item ->
-            DisplayScrollItem(item = item)
+            DisplayScrollItem(item, viewModel)
         }
     }
 }
 
 @Composable
-fun DisplayScrollItem(item: PrayerRequest) { // displays a single prayer request in the list
+fun DisplayScrollItem(item: PrayerRequest, viewModel: PrayerRequestViewModel) { // displays a single prayer request in the list
     val showDialog = rememberSaveable { mutableStateOf(false) }
 
     if(showDialog.value) {
-        ShowFullDetailsDialog(item, showDialog)
+        ShowFullDetailsDialog(item, showDialog, viewModel)
     }
 
     Card(
@@ -86,7 +88,9 @@ fun DisplayScrollItem(item: PrayerRequest) { // displays a single prayer request
 }
 
 @Composable
-fun ShowFullDetailsDialog(request: PrayerRequest, showDialog: MutableState<Boolean>) {
+fun ShowFullDetailsDialog(request: PrayerRequest, showDialog: MutableState<Boolean>, viewModel: PrayerRequestViewModel) {
+    val context = LocalContext.current
+
     Dialog(
         onDismissRequest = { showDialog.value = false },
         content = {
@@ -110,7 +114,11 @@ fun ShowFullDetailsDialog(request: PrayerRequest, showDialog: MutableState<Boole
                                     disabledContentColor = Color.Red
                                 ),
                                 content = { Text(text = "Delete") },
-                                onClick = { showDialog.value = false }
+                                onClick = {
+                                    viewModel.deletePrayerRequest(request)
+                                    showDialog.value = false
+                                    Toast.makeText(context, "Prayer Request Deleted", Toast.LENGTH_SHORT).show()
+                                }
                             )
                         }
                         LazyColumn() {
